@@ -1,0 +1,135 @@
+.fondoRojo{
+    background-color:#FF0000;
+}
+
+.fondoBlanco{
+    background-color:white;
+}
+.colorBlanco{
+    color:white;
+    font-size:0.9em;
+}
+
+.displayNone{
+    display:none;
+}
+
+.fondoBeige{
+    background-color:#f9f9c5;
+}
+
+.fuenteNavBar{
+    margin-left:1.3em; font-size:1em; background-color:#FF0000; color:white; cursor:pointer;
+}
+
+.cursorPointer{
+    cursor:pointer;
+}
+
+.centrarAuto{
+    margin: 0 auto;
+}
+
+.generalFontStyle{
+    font-size:1.1em;
+    text-align:center;
+    font-weight: bold;
+}
+
+.fontSizeNormal{
+    font-size:1.1em;
+}
+
+.margin5Left{
+    margin-left:0.5em;
+}
+
+.textAlignCenter{
+    text-align: center;
+}
+
+.fontStyleCarousel{
+    font-size:1.3em;
+    text-align:center;
+    color: black;
+}
+
+.imgCarouselBig{
+    max-width: 480px;
+    max-height: 500px;
+}
+
+.imgCarouselSm{
+    width: 98%;
+    height: auto;
+}
+
+.tituloCategorias{
+    box-shadow: 0 0 25px hsla(0, 0%, 0%, 0.60); 
+    color:#060606;
+    font-weight: bold;
+}
+
+.fontSizePreciosSuggested{
+    font-size:1.1em;
+    text-align:center;
+    color: black;
+}
+  
+  .card-flyer:hover{
+    background: #fff;
+    box-shadow: 0px 15px 26px rgba(0, 0, 0, 0.50);
+    -webkit-transition: all 0.1s ease-in;
+    -moz-transition: all 0.1s ease-in;
+    -ms-transition: all 0.1s ease-in;
+    -o-transition: all 0.1s ease-in;
+    transition: all 0.1s ease-in;
+    margin-top: 10px;
+  }
+
+  .fontSizeQuestions{
+    font-size:0.8em;
+    text-align:center;
+    color: black;
+}
+
+.centerImgCarousel {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.superTitulo {
+    color: #BF6734;
+    font-size: 1.5em;
+    font-style: italic;
+    font-weight: bold;
+    font-family: Helvetica;
+    text-shadow: 0 1px 0 #ccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaa, 0 6px 1px rgba(0,0,0,.1), 0 0 5px rgba(0,0,0,.1), 0 1px 3px rgba(0,0,0,.3), 0 3px 5px rgba(0,0,0,.2), 0 5px 10px rgba(0,0,0,.25), 0 10px 10px rgba(0,0,0,.2), 0 20px 20px rgba(0,0,0,.15);
+ }
+
+ .superTituloNegro {
+    color: black;
+    font-size: 1.5em;
+    font-style: italic;
+    font-weight: bold;
+    font-family: Helvetica;
+    text-shadow: 0 1px 0 #ccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaa, 0 6px 1px rgba(0,0,0,.1), 0 0 5px rgba(0,0,0,.1), 0 1px 3px rgba(0,0,0,.3), 0 3px 5px rgba(0,0,0,.2), 0 5px 10px rgba(0,0,0,.25), 0 10px 10px rgba(0,0,0,.2), 0 20px 20px rgba(0,0,0,.15);
+ }
+
+ .sombraBlanco{
+    box-shadow: 12px 12px 12px 12px #aaa; 
+    border-radius: 20px;  
+    background-color:  white;
+    padding: 6px;
+  }
+
+  .swal2-popup {
+    font-size: 0.9em !important;
+    font-style: bold !important;
+    font-family: 'Times New Roman', 'serif';
+  }
+
+  .MuiInputBase-input{
+    height: 16px !important;
+  }
