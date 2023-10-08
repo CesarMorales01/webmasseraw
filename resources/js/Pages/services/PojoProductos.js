@@ -5,7 +5,7 @@ class PojoProducto{
     descripcion;
     categoria;
     imagen;
-    precio;
+    valor;
     referencia;
     cantidad;
 
@@ -23,8 +23,8 @@ class PojoProducto{
         this.descripcion=desc;
     }
 
-    setPrecio(precio){
-        this.precio=precio;
+    setValor(precio){
+        this.valor=precio;
     }
 
     setCate(cat){

@@ -14,12 +14,12 @@ class QuestionController extends Controller
     }
 
     public function store(Request $request){
+        $datos = json_decode(file_get_contents('php://input'));
         DB::table('preguntas_sobre_productos')->insert([
-            'fecha'=>$request->fecha,
-            'cliente'=>$request->cliente,
-            'nombre_usuario'=>Auth()->user()->name,
-            'producto'=>$request->producto,
-            'pregunta'=>$request->pregunta
+            'fecha'=>$datos->fecha,
+            'cliente'=>Auth()->user()->email,
+            'producto'=>$datos->producto,
+            'pregunta'=>$datos->pregunta
         ]);
         return response()->json("ok", 200, []); 
     }

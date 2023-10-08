@@ -27,13 +27,14 @@ class ProductController extends Controller
         $info->telefonos = $telefonosPagina;
         $globalVars = $this->global->getGlobalVars();
         $productos = DB::table('productos')->orderBy('id', 'desc')->get();
-        foreach ($productos as $producto) {
-            if ($producto->imagen != '') {
-                $token = strtok($producto->imagen, "||");
-                $producto->nombre_imagen = $token;
-            }
-            $imagen = DB::table($this->global->getGlobalVars()->tablaImagenes)->where('fk_producto', '=', $producto->id)->first();
-            $producto->nombre_imagen = $imagen;
+        foreach ($productos as $item) {
+            if ($item->imagen != '') {
+                $token = strtok($item->imagen, "||");
+                $item->imagen = $token;
+            } else {
+                $imagen = DB::table('imagenes_productos')->where('fk_producto', '=', $item->id)->first();
+                $item->imagen = $imagen->nombre_imagen; 
+            } 
         }
         $categorias = DB::table('categorias')->get();
         return Inertia::render('Welcome', compact('auth', 'promos', 'info', 'globalVars', 'productos', 'categorias'));
@@ -87,7 +88,7 @@ class ProductController extends Controller
         $telefonosPagina = DB::table('telefonos_pagina')->get();
         $info->telefonos = $telefonosPagina;
         $globalVars = $this->global->getGlobalVars();
-        $productos = DB::table('productos')->orWhere('nombre', 'like', '%' . $producto . '%')->orWhere('descripcion', 'like', '%' . $producto . '%')->orWhere('categoria', 'like', '%' . $producto . '%')->get();
+        $productos = DB::table('productos')->orWhere('nombre', 'like', '%' . $producto . '%')->orWhere('descripcion', 'like', '%' . $producto . '%')->orWhere('categoria', 'like', '%' . $producto . '%')->orderBy('id', 'desc')->get();
         foreach ($productos as $item) {
             $item->codigo = $item->id;
             if ($item->imagen != '') {

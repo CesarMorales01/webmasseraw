@@ -34,8 +34,7 @@ const Searched = (params) => {
                 let pojo = new PojoProducto(params.allproducts[x].nombre, params.allproducts[x].id)
                 pojo.setImagen(params.allproducts[x].imagen.nombre_imagen)
                 // darle formato al precio
-                let precio_format = new Intl.NumberFormat("de-DE").format(params.allproducts[x].valor)
-                pojo.setPrecio("$ " + precio_format)
+                pojo.setValor(params.allproducts[x].valor)
                 pojo.setRef(params.allproducts[x].referencia)
                 array.push(pojo)
             }

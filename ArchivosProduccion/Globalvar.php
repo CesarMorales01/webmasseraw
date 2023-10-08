@@ -14,7 +14,7 @@ class Globalvar extends Model
 
     function __construct()
     {
-        $nombreApp="gestionpymes";
+        $nombreApp="masserawrelojeria";
 
         $this->globalVars = new stdClass();
         $this->globalVars->urlRoot = "https://admin.masserawrelojeria.site/";

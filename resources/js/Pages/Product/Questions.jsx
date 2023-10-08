@@ -73,25 +73,39 @@ const Questions = (params) => {
         document.getElementById('btnPreguntar').style.display = 'inline'
         document.getElementById('botonLoading').style.display = 'none'
     }
-
+   
     function fetchRegistrarPregunta() {
-        const url = params.globalVars.thisUrl + "question"
-        try {
-            loadingOn()
-            const formData = new FormData()
-            formData.append("pregunta", mensaje)
-            formData.append("fecha", glob.getFecha())
-            formData.append("cliente", params.auth.email)
-            formData.append("producto", params.producto.id)
-            axios.post(url, formData, {
-                headers: { 'content-type': 'text/json' }
-            }).then((res) => {
-                loadingOff()
-                recargarPreguntas()
-            }).catch((error) => {
-            })
-        } catch (error) {
+        const url = params.globalVars.thisUrl + "question?_token=" + params.token
+        let info = {
+            fecha: glob.getFecha(),
+            pregunta: mensaje,
+            producto: params.producto.id
         }
+        loadingOn()
+        fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(info),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((response) => {
+            return response.json()
+        }).then((res) => {
+            if (res == 'ok') {
+                //Enviar correo cuando haya una pregunta
+                let message = 'Ingresa para contestar a ' + params.globalVars.urlRoot + 'question'
+                let correo=params.info.correo
+                const enlace = params.globalVars.thisUrl + 'mail.php?app=' + params.globalVars.thisUrl + "&to=" + correo + "&message=" + message + "&subject=Nueva pregunta sobre producto! "
+                fetch(enlace)
+                    .then((response) => {
+                        return response.json()
+                    }).then((json) => {
+                        console.log(json)
+                    })
+            }
+            loadingOff()
+            recargarPreguntas()
+        })
     }
 
     function recargarPreguntas() {
@@ -142,7 +156,7 @@ const Questions = (params) => {
                     return (
                         <div className='container' key={index}>
                             <h5 style={{ marginTop: '0.2em' }}><li>{item.pregunta}</li></h5>
-                            <p style={{ color: 'gray' }}>{item.respuesta == null ? 'En breve unos de nuestros asesores dará respuesta...' : item.respuesta}</p>
+                            <p style={{ color: 'gray' }}>{item.respuesta == null ? 'En breve uno de nuestros asesores dará respuesta...' : item.respuesta}</p>
                         </div>
                     )
                 })}

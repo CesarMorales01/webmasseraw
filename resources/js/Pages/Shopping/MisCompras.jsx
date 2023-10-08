@@ -57,9 +57,7 @@ const MisCompras = (params) => {
             for (let x = num1; x < num2; x++) {
                 let pojo = new PojoProducto(params.productos[x].nombre, params.productos[x].id)
                 pojo.setImagen(params.productos[x].imagen.nombre_imagen)
-                // darle formato al precio
-                let precio_format = new Intl.NumberFormat("de-DE").format(params.productos[x].valor)
-                pojo.setPrecio("$ " + precio_format)
+                pojo.setValor(params.productos[x].valor)
                 pojo.setRef(params.productos[x].referencia)
                 array.push(pojo)
             }

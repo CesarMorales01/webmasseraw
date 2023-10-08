@@ -15,6 +15,7 @@ const Product = (params) => {
 
   const glob = new GlobalFunctions()
   const [producto, setProducto] = useState(params.producto)
+  const [agotado, setAgotado] = useState(false)
   const [cantidad, setCantidad] = useState(1)
   const [precioAntes, setPrecioAntes] = useState(true)
   const [productoSugeridos, setProductosSugeridos] = useState([])
@@ -23,13 +24,21 @@ const Product = (params) => {
   const [thisWidth, setthisWidth] = useState('')
 
   useEffect(() => {
-    procesarDatos()
     functionSetProductosSugeridos()
+    validarAgotado()
+    procesarDatos()
   }, [])
 
   useEffect(() => {
     setthisWidth(setDimensionPantalla())
   }, [])
+
+  function validarAgotado() {
+    if (params.producto.cantidad == '0') {
+      setAgotado(true)
+      setCantidad(0)
+    }
+  }
 
   function setDimensionPantalla() {
     let widthDiv
@@ -56,9 +65,9 @@ const Product = (params) => {
     if (params.producto.descripcion != null && descripcion.length == 0) {
       setDescripcion(params.producto.descripcion.split("."))
     }
-    setTimeout(() => {
+    if (agotado != true) {
       functionSetPrecioAntes()
-    }, 100);
+    }
   }
 
   const handleSelect = (selectedIndex, e) => {
@@ -84,9 +93,7 @@ const Product = (params) => {
         if (params.productos[x].categoria.includes(producto.categoria)) {
           let pojo = new PojoProducto(params.productos[x].nombre, params.productos[x].id)
           pojo.setImagen(params.productos[x].imagen.nombre_imagen)
-          // darle formato al precio
-          let precio_format = new Intl.NumberFormat("de-DE").format(params.productos[x].valor)
-          pojo.setPrecio("$ " + precio_format)
+          pojo.setValor(params.productos[x].valor)
           pojo.setRef(params.productos[x].referencia)
           array.push(pojo)
         }
@@ -107,13 +114,9 @@ const Product = (params) => {
   }
 
   function functionSetPrecioAntes() {
-    let num = Math.random()
-    let item = document.getElementById("tv_precio_antes")
-    if (num > 0.8 && precioAntes && item != null && producto.valor != '0') {
-      let precio_ant = (parseInt(producto.valor) * 0.2) + parseInt(producto.valor);
-      document.getElementById("tv_precio_antes").innerText = "Antes: $ " + new Intl.NumberFormat("de-DE").format(precio_ant);
-      document.getElementById("tv_precio").innerText = "Hoy: $" + new Intl.NumberFormat("de-DE").format(producto.valor)
-    }
+    let precio_ant = (parseInt(producto.valor) * 0.2) + parseInt(producto.valor);
+    document.getElementById("tv_precio_antes").innerText = "Antes: $ " + new Intl.NumberFormat("de-DE").format(precio_ant);
+    document.getElementById("tv_precio").innerText = "Hoy: $" + new Intl.NumberFormat("de-DE").format(producto.valor)
     setPrecioAntes(false)
   }
 
@@ -146,21 +149,25 @@ const Product = (params) => {
   }
 
   function masCant() {
-    if (params.producto.cantidad != null) {
-      if (params.producto.cantidad < cantidad + 1) {
-        return
-      } else {
-        setCant()
-      }
+    if (agotado) {
+      return
     } else {
-      setCant()
+      if (params.producto.cantidad == null) {
+        setCant()
+      } else {
+        if (params.producto.cantidad == '') {
+          setCant()
+        } else {
+          if (params.producto.cantidad >= cantidad + 1) {
+            setCant()
+          }
+        }
+      }
     }
   }
 
   function setCant() {
-    if (cantidad < 6) {
-      setCantidad(cantidad + 1)
-    }
+    setCantidad(cantidad + 1)
   }
 
   function checkUsuario() {
@@ -203,7 +210,7 @@ const Product = (params) => {
               {producto.imagen.map((item, index) => {
                 return (
                   <div key={index} id={'divMin' + index} onClick={() => cambiarImagen(index)} className="col-sm-3 col-md-12" style={{ height: '4em', width: '7em', margin: '20px', cursor: 'pointer', marginLeft: '0.6em' }}>
-                    <img className="img-fluid img-thumbnail" style={{ height: '80px', width: '100px' }} src={params.globalVars.urlRoot + 'Images/Products/' + item.nombre_imagen} />
+                    <img className="img-fluid img-thumbnail" style={{ height: 'auto', width: '80%' }} src={params.globalVars.urlRoot + 'Images/Products/' + item.nombre_imagen} />
                     <br />
                   </div>
                 )
@@ -228,73 +235,74 @@ const Product = (params) => {
             </div>
             <div className="col-lg-4 col-md-4 col-sm-12">
               <div style={{ padding: '0.1em' }} className="text-center card-flyer rounded">
-                  <form id='formRegistro' action={route('shopping.store')} method="post" >
-                    <input type='hidden' name='_token' value={params.token}></input>
-                    <input type='hidden' name='codigo' value={producto.id}></input>
-                    <input type='hidden' name='nombre' value={producto.nombre}></input>
-                    <input type='hidden' name='imagen' value={producto.imagen[0].nombre_imagen}></input>
-                    <input type='hidden' name='cantidad' value={cantidad}></input>
-                    <input type='hidden' name='valor' value={producto.valor}></input>
-                    <input type='hidden' name='fecha' value={glob.getFecha()}></input>
-                    <br />
-                    <h1 id="titulo_producto" style={{ fontSize: '1.4em', fontWeight: 'bold' }}>{producto.nombre}</h1>
-                    <br />
-                    <h3 id="tv_precio_antes" style={{ color: 'red', textDecoration: 'line-through' }} className="fontSizePreciosSuggested"></h3>
-                    <h3 id="tv_precio" style={{ fontSize: '1.4em', fontWeight: 'bold' }}>{producto.cantidad == 0 ? '-' : '$ ' + glob.formatNumber(producto.valor)}</h3>
-                    <br />
-                    <div className="container">
-                      <div className="row">
-                        <div className="col-sm-5 col-12">
-                          <h6 >Cantidad</h6>
-                        </div>
-                        <div onClick={menosCant} className="col-sm-1 col-4 cursorPointer">
-                          <i style={{ color: 'green' }} className="fas fa-minus"></i>
-                        </div>
-                        <div className="col-sm-4 col-4">
-                          <span style={{ fontWeight: 'bold', fontSize: '1.3em' }}>{cantidad}</span>
-                        </div>
-                        <div onClick={masCant} className="col-sm-1 col-4 cursorPointer">
-                          <i style={{ color: 'green', fontSize: '1.5em' }} className="fas fa-plus"></i>
-                        </div>
+                <form id='formRegistro' action={route('shopping.store')} method="post" >
+                  <input type='hidden' name='_token' value={params.token}></input>
+                  <input type='hidden' name='codigo' value={producto.id}></input>
+                  <input type='hidden' name='nombre' value={producto.nombre}></input>
+                  <input type='hidden' name='imagen' value={producto.imagen[0].nombre_imagen}></input>
+                  <input type='hidden' name='cantidad' value={cantidad}></input>
+                  <input type='hidden' name='valor' value={producto.valor}></input>
+                  <input type='hidden' name='fecha' value={glob.getFecha()}></input>
+                  <br />
+                  <h1 id="titulo_producto" style={{ fontSize: '1.4em', fontWeight: 'bold' }}>{producto.nombre}</h1>
+                  <br />
+                  <h3 id="tv_precio_antes" style={{ color: 'red', textDecoration: 'line-through' }} className="fontSizePreciosSuggested"></h3>
+                  <h3 id="tv_precio" style={{ fontSize: '1.4em', fontWeight: 'bold' }}>{agotado ? '-' : '$ ' + glob.formatNumber(producto.valor)}</h3>
+                  <br />
+                  <div className="container">
+                    <div className="row">
+                      <div className="col-sm-5 col-12">
+                        <h6 >Cantidad</h6>
                       </div>
-                      <p style={{ fontSize: '0.9em', display: params.producto.cantidad != null ? '' : 'none' }}>(Disponibles: {params.producto.cantidad})</p>
+                      <div onClick={menosCant} className="col-sm-1 col-4 cursorPointer">
+                        <i style={{ color: 'green' }} className="fas fa-minus"></i>
+                      </div>
+                      <div className="col-sm-4 col-4">
+                        <span style={{ fontWeight: 'bold', fontSize: '1.3em' }}>{cantidad}</span>
+                      </div>
+                      <div onClick={masCant} className="col-sm-1 col-4 cursorPointer">
+                        <i style={{ color: 'green', fontSize: '1.5em' }} className="fas fa-plus"></i>
+                      </div>
                     </div>
-                    <br />
-                    <h3 id="tv_llega" ></h3>
-                    {/*formulario producto */}
-                    <button id='btnComprar' type='button' onClick={checkUsuario} style={{ width: '94%', backgroundColor: producto.cantidad == 0 ? 'gray' : 'green' }}
-                      className="btn btn-success btn-lg" disabled={producto.cantidad == 0 ? true : false}>
-                      {producto.cantidad == 0 ? 'Producto agotado' : 'Agregar al carrito'}
-                      <i className="fa-solid fa-cart-plus fa-lg" style={{ marginLeft: '1em' }}></i>
-                    </button>
-                    <button id='btnLoading' style={{ width: '94%', display: 'none', backgroundColor: 'green' }} className="btn btn-primary btn-lg" type="button" disabled>
-                      <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                      Loading...
-                    </button>
-                    <br></br>
-                    <button type='button' onClick={comprarByWhatsapp} style={{ width: '94%', marginTop: '1em', backgroundColor: '#0b6730' }}
-                      className="btn btn-success btn-lg" disabled={producto.cantidad == 0 ? true : false}>
-                      Compra por
-                      <i className="fa-brands fa-whatsapp fa-lg" style={{ marginLeft: '1em' }}></i>
-                    </button>
-                    <div style={{ textAlign: 'right', marginTop: '1em' }} className='container'>
-                      <RWebShare
-                        data={{
-                          text: producto.nombre,
-                          url: params.globalVars.thisUrl + "product/" + producto.id,
-                          title: producto.nombre
-                        }}
-                      >
-                        <button type='button' className='btn btn-outline-primary btn-sm rouded'>
-                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-share-fill" viewBox="0 0 16 16">
-                            <path d="M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5z" />
-                          </svg>
-                        </button>
-                      </RWebShare>
-                      <h3 style={{ color: 'green', marginTop: '1em' }} className='fontSizePreciosSuggested'>¡Lo entregamos en la puerta de su casa!.</h3>
-                    </div>
-                    <br />
-                  </form>
+                    <p style={{ fontSize: '0.9em', display: params.producto.cantidad != null ? '' : 'none' }}>(Disponibles: {params.producto.cantidad})</p>
+                  </div>
+                  <br />
+                  <h3 id="tv_llega" ></h3>
+                  {/*formulario producto */}
+                  <button id='btnComprar' type='button' onClick={checkUsuario} style={{ width: '94%', backgroundColor: agotado ? 'gray' : 'black' }}
+                    className="btn btn-success btn-lg" disabled={agotado ? true : false}>
+                    {agotado ? 'Producto agotado' : 'Agregar al carrito'}
+                    <i className="fa-solid fa-cart-plus fa-lg" style={{ marginLeft: '1em' }}></i>
+                  </button>
+                  <button id='btnLoading' style={{ width: '94%', display: 'none', backgroundColor: 'green' }} className="btn btn-primary btn-lg" type="button" disabled>
+                    <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    Loading...
+                  </button>
+                  <br></br>
+                  {/*'#0b6730'*/}
+                  <button type='button' onClick={comprarByWhatsapp} style={{ width: '94%', marginTop: '1em', backgroundColor: 'green' }}
+                    className="btn btn-success btn-lg" disabled={agotado ? true : false}>
+                    Compra por
+                    <i className="fa-brands fa-whatsapp fa-lg" style={{ marginLeft: '1em' }}></i>
+                  </button>
+                  <div style={{ textAlign: 'right', marginTop: '1em' }} className='container'>
+                    <RWebShare
+                      data={{
+                        text: producto.nombre,
+                        url: params.globalVars.thisUrl + "product/" + producto.id,
+                        title: producto.nombre
+                      }}
+                    >
+                      <button type='button' className='btn btn-outline-primary btn-sm rouded'>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-share-fill" viewBox="0 0 16 16">
+                          <path d="M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5z" />
+                        </svg>
+                      </button>
+                    </RWebShare>
+                    <h3 style={{ color: 'green', marginTop: '1em' }} className='fontSizePreciosSuggested'>¡Lo entregamos en la puerta de su casa!.</h3>
+                  </div>
+                  <br />
+                </form>
               </div>
             </div>
           </div>
@@ -316,7 +324,7 @@ const Product = (params) => {
             <br />
           </div>
         </div>
-        <Questions auth={params.auth} producto={producto} info={params.info} globalVars={params.globalVars} ></Questions>
+        <Questions token={params.token} auth={params.auth} producto={producto} info={params.info} globalVars={params.globalVars} ></Questions>
         <SuggestedProducts categoria='Otras personas quienes vieron este producto tambien compraron...' productos={productoSugeridos} globalVars={params.globalVars} />
         <Contact url={params.globalVars.urlRoot} datos={params.info}></Contact>
       </AuthenticatedLayout >

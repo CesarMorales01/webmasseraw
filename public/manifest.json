@@ -1,0 +1,17 @@
+{
+    "name": "Masseraw relojeria",
+    "short_name": "Masseraw",
+    "start_url": "/index.php",
+    "background_color": "#FFFFFF",
+    "description": "Masseraw relojeria",
+    "display": "standalone",
+    "theme_color": "#FFFFFF",
+    "icons": [
+        {
+            "src": "plus.PNG",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+}

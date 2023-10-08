@@ -74,6 +74,10 @@ export default function Welcome(params) {
         window.open(href, "nuevo", "directories=no, location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=800, height=600");
     }
 
+    function goSisteCredito() {
+        let href = "https://www.sistecredito.com/";
+        window.open(href, "nuevo", "directories=no, location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=800, height=600");
+    }
     // Creación de arrays para mostrar resumen de productos por categorias
     let matrix = []
     let countCates = params.categorias.length
@@ -84,9 +88,7 @@ export default function Welcome(params) {
                 let pojo = new PojoProducto(params.productos[x].nombre, params.productos[x].id)
                 pojo.setDescripcion(params.productos[x].descripcion)
                 pojo.setImagen(params.productos[x].imagen.nombre_imagen)
-                // darle formato al precio
-                let precio_format = new Intl.NumberFormat("de-DE").format(params.productos[x].valor)
-                pojo.setPrecio("$ " + precio_format)
+                pojo.setValor(params.productos[x].valor)
                 pojo.setRef(params.productos[x].referencia)
                 array.push(pojo)
             }
@@ -146,19 +148,30 @@ export default function Welcome(params) {
                         <h5 onClick={goWhats} >Escribénos!</h5>
                         <img alt='' onClick={goWhats} src={params.globalVars.urlRoot + 'Images/Config/whatsApp_btn.png'}></img>
                     </div>
+                    <br></br>
                     <div style={{ marginTop: '1em' }} id={"divEnvios"} onTouchEnd={() => desactivarHover('')} onTouchStart={() => activarHover('')} className="card-flyer rounded">
-                        <h1 style={{ marginTop: 6, fontSize: '1.2em' }} className="generalFontStyle">
-                            Envios seguros y pagos contraentrega en el 80% del territorio colombiano con nuestra transportadora aliada envía.
+                        <h1 style={{ marginTop: 6, fontSize: '1.2em', padding: '1em' }} className="generalFontStyle">
+                            Envios seguros y pagos contraentrega en el 90% del territorio colombiano con nuestras transportadoras aliadas:
                         </h1>
                         <img style={{ width: '29em', height: 'auto' }} className="card-img-top img-fluid centerImgCarousel" src={params.globalVars.urlRoot + 'Images/Config/envia.webp'} alt="" />
+                        <img style={{ width: '29em', height: 'auto', padding: '0.5em' }} className="card-img-top img-fluid centerImgCarousel" src={params.globalVars.urlRoot + 'Images/Config/interrapidisimo.jpeg'} alt="" />
                     </div>
+                    <br></br>
                     <div style={{ marginTop: '1em' }} id={"divEnvios"} onTouchEnd={() => desactivarHover('')} onTouchStart={() => activarHover('')} className="card-flyer rounded">
-                        <h1 style={{ marginTop: 6, fontSize: '1.2em' }} className="card-title generalFontStyle">
+                        <h1 style={{ marginTop: 6, fontSize: '1.2em', padding: '1em' }} className="card-title generalFontStyle">
                             Pagos seguros con
                         </h1>
                         <img style={{ width: window.screen.width > 600 ? '30%' : '70%', height: 'auto' }} className="card-img-top img-fluid centerImgCarousel" src={params.globalVars.urlRoot + 'Images/Config/logowompi.png'} alt="" />
                     </div>
+                    <br></br>
+                    <div onClick={goSisteCredito} style={{ marginTop: '1em', padding: '2em' }} id={"divEnvios"} onTouchEnd={() => desactivarHover('')} onTouchStart={() => activarHover('')} className="card-flyer rounded">
+                        <h1 style={{ marginTop: 6, fontSize: '1.2em' }} className="card-title generalFontStyle">
+                            No esperes más para tenerlo, ¡Obtenlo ya con sistecrédito!
+                        </h1>
+                        <img style={{ width: window.screen.width > 600 ? '30%' : '70%', height: 'auto' }} className="card-img-top img-fluid centerImgCarousel" src={params.globalVars.urlRoot + 'Images/Config/sistecredito.png'} alt="" />
+                    </div>
                 </div>
+                <br></br>
                 <Contact url={params.globalVars.urlRoot} datos={params.info}></Contact>
             </AuthenticatedLayout>
         </>
