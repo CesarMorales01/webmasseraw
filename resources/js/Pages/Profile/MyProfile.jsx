@@ -238,16 +238,16 @@ const MyProfile = (params) => {
         if (divDireccion) {
             abrirDialogoContra()
         } else {
-            if (validarDatosVaciosDir()) {
-                if (datosCliente.nombre == '' || datosCliente.cedula == '') {
-                    sweetAlert('Falta información importante en la sección de datos personales!')
-                }
-            } else {
-                if (datosCliente.clave == datosCliente.confirmClave) {
-                    loadingOn()
-                    document.getElementById('formRegistro').submit()
-                } else {
-                    sweetAlert('Las contraseña no coinciden!')
+            if (datosCliente.nombre == '' || datosCliente.cedula == '' || datosCliente.cedula==null) {
+                sweetAlert('Falta información importante en la sección de datos personales!')
+            }else{
+                if (validarDatosVaciosDir()) {} else {
+                    if (datosCliente.clave == datosCliente.confirmClave) {
+                        loadingOn()
+                        document.getElementById('formRegistro').submit()
+                    } else {
+                        sweetAlert('Las contraseña no coinciden!')
+                    }
                 }
             }
         }

@@ -70,8 +70,10 @@ const CheckOut = (params) => {
         if (params.modoPago == 'contraentrega') {
             registrarCompra('')
         } else {
-            fetchRefWompi()
+            registrarCompra('')
             document.getElementById('btnPagarValidarPago').style.display = 'inline'
+            let href = "https://checkout.wompi.co/l/VPOS_ucW4bs";
+            window.open(href, "nuevo", "directories=no, location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=800, height=600");
         }
     }
 
@@ -104,7 +106,6 @@ const CheckOut = (params) => {
                     .then((response) => {
                         return response.json()
                     }).then((json) => {
-                        console.log(json)
                     })
                 if (ref == '') {
                     window.location.href = params.globalVars.thisUrl + 'shopping/create'
@@ -248,7 +249,7 @@ const CheckOut = (params) => {
                                 <br />
                                 <div onClick={validarModoPago} className={params.thisWidth > 400 ? 'container' : 'justify-content-between'}>
                                     <div className="col-lg-12" >
-                                        <img className='centerImgCarousel' id='imgPago' style={{ width: window.screen.width >600 ? '20%' : '46%', height: 'auto' }} src='' alt='' />
+                                        <img className='centerImgCarousel' id='imgPago' style={{ width: window.screen.width > 600 ? '20%' : '46%', height: 'auto' }} src='' alt='' />
                                     </div>
                                     <br />
                                     <button id="btnCheckOut" style={{ backgroundColor: 'green', color: 'white' }} className="btn btn-outline-success btn-lg my-2 my-sm-0" type="button">
@@ -274,9 +275,25 @@ const CheckOut = (params) => {
                                 <input type="hidden" name="shipping-address:phone-number" value={datosCliente.cedula} />
                                 <input type="hidden" name="shipping-address:city" value={params.auth.email} />
                                 <input type="hidden" name="shipping-address:region" value='Santander' />
-                                
+
                             </form>
                             <br />
+                            <h3 style={{ fontWeight: 'bold', marginBottom: '1em' }}>También puedes realizar el pago a las siguientes cuentas, y  enviar el comprobante a nuestro whatsapp 3164766373, para proceder al despacho del pedido:</h3>
+                            <div style={{marginBottom: '1em'}} className='container row'>
+                                <div style={{ textAlign: 'center' }} className='col-lg-6 col-md-6 col-sm-12 col-12'>
+                                    <img className='centerImgCarousel' style={{ width: '50%', height: 'auto', marginBottom: '1em' }} src={params.globalVars.urlRoot + 'Images/Config/qrnequi.jpeg'}></img>
+                                    <h1>
+                                        Nequi 3163684477
+                                    </h1>
+                                </div>
+                                <div style={{ textAlign: 'center' }} className='col-lg-6 col-md-6 col-sm-12 col-12'>
+                                    <img className='centerImgCarousel' style={{ width: '50%', height: 'auto', marginBottom: '0em' }} src={params.globalVars.urlRoot + 'Images/Config/qrbancolombia.jpeg'}></img>
+                                    <h1>
+                                        Cuenta de ahorros Bancolombia N° 078-129458-87
+                                    </h1>
+                                    <h1>Jhon García</h1>
+                                </div>
+                            </div>
                             <div onClick={goWhats} className="container">
                                 <a className="btn btn-outline-dark btn-sm">Dudas? Preguntanos!
                                     <i style={{ marginLeft: '0.5em', color: 'green' }} className="fa-brands fa-square-whatsapp fa-2xl"></i>

@@ -74,7 +74,7 @@ class ShoppingController extends Controller
         if (count($get_compra_n) > 0) {
             $compra_n = $compra_n + $get_compra_n[0];
         }
-        $medioPago = "Pago contraentrega";
+        $medioPago = $datos->formaPago;
         if ($datos->referenciaWompi != '') {
             $medioPago = "Pago electronico. Proceso iniciado.";
         }

@@ -380,7 +380,7 @@ const ShoppingCart = (params) => {
                                         </div>
                                         <div style={{ padding: '1vh', marginTop: '0.2em', cursor: 'pointer' }} className="container card" >
                                             <div onClick={() => cambiarModoPago('electronico')} className="row align-items-center">
-                                                <label style={{ textAlign: 'center', cursor: 'pointer' }}>Pago en linea. Comisión del 3.5% sobre el valor de la compra</label>
+                                                <label style={{ textAlign: 'center', cursor: 'pointer' }}>Pago en linea.</label>
                                                 <div className="col-4">
                                                     <input type="radio" id="wompi" name="medio_pago" value="wompi" />
                                                 </div>
